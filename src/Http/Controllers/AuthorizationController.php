@@ -11,6 +11,7 @@ use Laravel\Passport\Bridge\User;
 use Laravel\Passport\ClientRepository;
 use Laravel\Passport\Passport;
 use Laravel\Passport\TokenRepository;
+use Laravel\Passport\Contracts\AuthorizationViewResponse;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Nyholm\Psr7\Response as Psr7Response;
@@ -108,8 +109,8 @@ class AuthorizationController
 
         $request->session()->put('authToken', $authToken = Str::random());
         $request->session()->put('authRequest', $authRequest);
-
-        return $this->response->view('passport::authorize', [
+        
+        return app(AuthorizationViewResponse::class, [
             'client' => $client,
             'user' => $user,
             'scopes' => $scopes,
